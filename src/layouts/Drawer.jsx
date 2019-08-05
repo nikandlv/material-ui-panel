@@ -64,16 +64,9 @@ function ResponsiveDrawer(props) {
   }
 
   function handleDrawerOpen() {
-    setOpen(true);
-  }
-
-  function toggleDrawerOpen() {
     setOpen(!open);
   }
 
-  function handleDrawerClose() {
-    setOpen(false);
-  }
 
 
   const drawer = (
@@ -102,7 +95,7 @@ function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
-      <PrimarySearchAppBar mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
+      <PrimarySearchAppBar setMini={handleDrawerOpen} mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -137,7 +130,7 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph onClick={toggleDrawerOpen}>
+        <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
           facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit

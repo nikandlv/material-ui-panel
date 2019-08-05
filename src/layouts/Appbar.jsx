@@ -8,6 +8,8 @@ import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
+import ArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import ArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -21,6 +23,12 @@ const useStyles = makeStyles(theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  miniButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
   },
@@ -45,20 +53,11 @@ const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   appBar: {
     backgroundColor:'white',
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    backgroundColor:'white',
     marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    [theme.breakpoints.up('sm')]: {
+      width: `100%`,
+      zIndex: theme.zIndex.drawer + 1,
+    },
   },
   
 }));
@@ -147,7 +146,7 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" className={props.mini?classes.appBarShift:classes.appBar} color="default">
+      <AppBar position="fixed" className={classes.appBar} color="default">
         <Toolbar className={classes.toolbar} >
         <IconButton
             color="inherit"
@@ -157,6 +156,19 @@ export default function PrimarySearchAppBar(props) {
             className={classes.menuButton}
           >
             <MenuIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={props.setMini}
+            className={classes.miniButton}
+          >
+            {
+                props.mini
+                ? (<ArrowLeft />)
+                : (<ArrowRight />)
+            }
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
             Material-Panel
