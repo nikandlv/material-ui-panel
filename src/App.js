@@ -8,11 +8,11 @@ import ResponsiveDrawer from './layouts/Drawer';
 import { createMuiTheme } from '@material-ui/core';
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 const theme = createMuiTheme({
-  direction: 'rtl',
+  direction: 'ltr',
 });
 function App() {
   return (
-    <div dir="rtl">
+    <div dir="ltr">
     <StylesProvider jss={jss}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
