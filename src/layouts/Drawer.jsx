@@ -57,7 +57,7 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
@@ -65,6 +65,10 @@ function ResponsiveDrawer(props) {
 
   function handleDrawerOpen() {
     setOpen(true);
+  }
+
+  function toggleDrawerOpen() {
+    setOpen(!open);
   }
 
   function handleDrawerClose() {
@@ -98,7 +102,7 @@ function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
-      <PrimarySearchAppBar className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
+      <PrimarySearchAppBar mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -120,9 +124,10 @@ function ResponsiveDrawer(props) {
         </Hidden>
         <Hidden xsDown implementation="css">
           <Drawer
+            className={open?classes.drawerOpen:classes.drawerClose}
             classes={{
-              paper: classes.drawerPaper,
-            }}
+                paper: open?classes.drawerOpen:classes.drawerClose,
+              }}
             variant="permanent"
             open
           >
@@ -132,7 +137,7 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
+        <Typography paragraph onClick={toggleDrawerOpen}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
           facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit

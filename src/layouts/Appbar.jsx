@@ -45,12 +45,14 @@ const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   appBar: {
     backgroundColor:'white',
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   appBarShift: {
+    backgroundColor:'white',
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -145,7 +147,7 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" className={classes.appBar} color="default">
+      <AppBar position="fixed" className={props.mini?classes.appBarShift:classes.appBar} color="default">
         <Toolbar className={classes.toolbar} >
         <IconButton
             color="inherit"
