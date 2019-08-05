@@ -93,7 +93,6 @@ function ResponsiveDrawer(props) {
   return (
     <div className={classes.root}>
       <PrimarySearchAppBar setMini={handleDrawerOpen} mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
-      <nav className={classes.drawer+" " +(open?classes.drawerOpen:classes.drawerClose)} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
@@ -102,9 +101,10 @@ function ResponsiveDrawer(props) {
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
             onClose={handleDrawerToggle}
+            className={open?classes.drawerOpen:classes.drawerClose}
             classes={{
-              paper: classes.drawerPaper,
-            }}
+                paper: open?classes.drawerOpen:classes.drawerClose,
+              }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
             }}
@@ -124,7 +124,6 @@ function ResponsiveDrawer(props) {
             {drawer}
           </Drawer>
         </Hidden>
-      </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Typography paragraph>
