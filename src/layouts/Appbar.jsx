@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
   },
   title: {
     display: 'none',
@@ -83,6 +86,7 @@ const useStyles = makeStyles(theme => ({
       width: `calc(100% - ${drawerWidth}px)`,
     },
   },
+  
 }));
 
 export default function PrimarySearchAppBar(props) {
