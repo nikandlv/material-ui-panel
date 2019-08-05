@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PrimarySearchAppBar from './Appbar';
@@ -25,21 +20,26 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
   },
-  appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
     [theme.breakpoints.up('sm')]: {
-      display: 'none',
+      width: theme.spacing(9) + 1,
     },
   },
   toolbar: theme.mixins.toolbar,
@@ -57,10 +57,24 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
+
+  function handleDrawerOpen() {
+    setOpen(true);
+  }
+
+  function toggleDrawerOpen() {
+    setOpen(!open);
+  }
+
+  function handleDrawerClose() {
+    setOpen(false);
+  }
+
 
   const drawer = (
     <div>
@@ -88,8 +102,7 @@ function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <PrimarySearchAppBar className={classes.appBar} />
+      <PrimarySearchAppBar mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -111,9 +124,10 @@ function ResponsiveDrawer(props) {
         </Hidden>
         <Hidden xsDown implementation="css">
           <Drawer
+            className={open?classes.drawerOpen:classes.drawerClose}
             classes={{
-              paper: classes.drawerPaper,
-            }}
+                paper: open?classes.drawerOpen:classes.drawerClose,
+              }}
             variant="permanent"
             open
           >
@@ -123,7 +137,7 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography paragraph>
+        <Typography paragraph onClick={toggleDrawerOpen}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
           ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
           facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
