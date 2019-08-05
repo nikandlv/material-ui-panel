@@ -20,9 +20,26 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
+      width: theme.spacing(9) + 1,
     },
   },
   toolbar: theme.mixins.toolbar,
@@ -40,10 +57,20 @@ function ResponsiveDrawer(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
+
+  function handleDrawerOpen() {
+    setOpen(true);
+  }
+
+  function handleDrawerClose() {
+    setOpen(false);
+  }
+
 
   const drawer = (
     <div>
