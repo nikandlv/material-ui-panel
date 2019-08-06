@@ -13,7 +13,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PrimarySearchAppBar from './Appbar';
-import { Fade } from '@material-ui/core';
 import { Switch, Route } from 'react-router'
 import Overview from '../pages/Overview'
 import About from '../pages/About';
@@ -149,7 +148,6 @@ function ResponsiveDrawer(props) {
         </Hidden>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Fade>
           <Switch>
             {
               Object.keys(panelRoutes).map((group) => {
@@ -161,7 +159,6 @@ function ResponsiveDrawer(props) {
               }) 
             }
           </Switch>
-        </Fade>
       </main>
     </div>
   );
