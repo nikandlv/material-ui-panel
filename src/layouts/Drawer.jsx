@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
+import Explore from '@material-ui/icons/ExploreOutlined';
+import Info from '@material-ui/icons/InfoOutlined';
+import Settings from '@material-ui/icons/SettingsOutlined';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -64,28 +66,33 @@ function ResponsiveDrawer(props) {
     setOpen(!open);
   }
 
-
+  const list = [
+    { label: 'Overview', icon: <Explore />, path: '/panel/test' },
+    <Divider/>,
+    { label: 'Settings', icon: <Settings />, path: '/panel/settings' },
+    { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about' },
+  ]
 
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        {list.map((item, index) => {
+          if(typeof item.label === 'undefined') {
+            return (
+              <div key={index}>
+                {item}
+              </div>
+            );
+          }
+          return (
+            <ListItem button key={item.label + index}>
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.label} />
+            </ListItem>
+          )}
+        )}
       </List>
     </div>
   );
