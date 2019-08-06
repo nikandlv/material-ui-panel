@@ -54,6 +54,9 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     padding: theme.spacing(3),
   },
+  menuItemText: {
+    whiteSpace: 'nowrap'
+  }
 }));
 
 function ResponsiveDrawer(props) {
@@ -104,7 +107,7 @@ function ResponsiveDrawer(props) {
           return (
             <ListItem component={CollisionLink} to={item.path} button key={item.label + index}>
               <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemText className={classes.menuItemText} primary={item.label} />
             </ListItem>
           )}
         )}
