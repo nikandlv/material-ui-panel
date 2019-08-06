@@ -1,8 +1,8 @@
 import React from 'react'
-export default function Overview() {
+export default function Item(props) {
     return (
         <div>
-            Overview
+            Item {props.number}
         </div>
     )
 }

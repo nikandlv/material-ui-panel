@@ -14,12 +14,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PrimarySearchAppBar from './Appbar';
 import { Switch, Route } from 'react-router'
-import Overview from '../pages/Overview'
 import About from '../pages/About';
 import Settings from '../pages/Settings';
 import { Link } from 'react-router-dom'
 import Collapse from '@material-ui/core/Collapse'
 import { ListItemSecondaryAction } from '@material-ui/core';
+import NotFound from '../pages/NotFound';
+import Item from '../pages/Item';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -198,13 +199,13 @@ function ResponsiveDrawer(props) {
   }
 
   const list = [
-    { label: 'Overview', icon: <Explore />, path: '/panel/overview', children: [
-      { label: 'Item 1', icon: <SettingsIcon />, path: '/panel/settings/item1', children: [
-        { label: 'Item 3', icon: <SettingsIcon />, path: '/panel/settings/item3' },  
-        { label: 'Item 4', icon: <SettingsIcon />, path: '/panel/settings/item4' },
+    { label: 'Overview', icon: <Explore />, path: '', children: [
+      { label: 'Item 1', icon: <SettingsIcon />, path: '', children: [
+        { label: 'Item 3', icon: <SettingsIcon />, path: '/panel/item3' },  
+        { label: 'Item 4', icon: <SettingsIcon />, path: '/panel/item4' },
       ]
      },  
-      { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/settings/item2' },
+      { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
     ] },
     <Divider/>,
     { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
@@ -213,7 +214,9 @@ function ResponsiveDrawer(props) {
 
   const panelRoutes = {
     Main: [
-      {  path: '/panel/overview', render: props => <Overview {...props}/> },
+      {  path: '/panel/item2', render: props => <Item number={2} {...props}/> },
+      {  path: '/panel/item3', render: props => <Item number={3} {...props}/> },
+      {  path: '/panel/item4', render: props => <Item number={4} {...props}/> },
       {  path: '/panel/settings', render: props => <Settings {...props}/> },
       {  path: '/panel/about', render: props => <About {...props}/> }
     ]
@@ -277,8 +280,10 @@ function ResponsiveDrawer(props) {
                     <Route path={route.path} key={'panel-route-' + route.path} render={route.render} exact/>
                   )
                 })
-              }) 
+              })
+              
             }
+            <Route component={NotFound}/>
           </Switch>
       </main>
     </div>
