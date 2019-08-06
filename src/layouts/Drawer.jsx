@@ -6,6 +6,8 @@ import Hidden from '@material-ui/core/Hidden';
 import Explore from '@material-ui/icons/ExploreOutlined';
 import Info from '@material-ui/icons/InfoOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import ChevronDown from '@material-ui/icons/KeyboardArrowDown'
+import ChevronUp from '@material-ui/icons/KeyboardArrowUp'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -19,6 +21,7 @@ import About from '../pages/About';
 import Settings from '../pages/Settings';
 import { Link } from 'react-router-dom'
 import Collapse from '@material-ui/core/Collapse'
+import { ListItemSecondaryAction } from '@material-ui/core';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -36,6 +39,13 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    '& .mini-expand-icon': {
+      opacity: 1,
+      transition: theme.transitions.create('opacity', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    }
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -45,10 +55,24 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
     width: theme.spacing(7) + 1,
+    '& .mini-expand-icon': {
+      opacity: 0,
+      transition: theme.transitions.create('opacity', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
     '&:hover': {
       width: drawerWidth,
       '& .nestedMini': {
         paddingLeft: '1rem'
+      },
+      '& .mini-expand-icon': {
+        opacity: 1,
+        transition: theme.transitions.create('opacity', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        }),
       }
     }
   },
@@ -84,6 +108,18 @@ const useStyles = makeStyles(theme => ({
   nestedMenuMini: {
     backgroundColor: '#e3e3e3',
     paddingLeft: '0rem'
+  },
+  listItemIcon: {
+    transition: theme.transitions.create('transform', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  listItemIconOpen: {
+    transform: 'rotate(180deg)',
+  },
+  hidden : {
+    display: 'none'
   }
 }));
 
@@ -98,6 +134,13 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   }
 
+  function openNestedMenu(parent_id,key) {
+    if(key == openMenu) {
+      return setOpenMenu(parent_id)
+    }
+    setOpenMenu(key)
+  }
+
   function calculateDescendants(children) {
     let descendants = [];
     children.forEach((element,index) => {
@@ -105,14 +148,13 @@ function ResponsiveDrawer(props) {
       descendants.push(element.label + index);
       if(typeof element.children !== 'undefined') {
         if(element.children.length > 0) {
-          descendants = [...descendants,calculateDescendants(element.children)];
+          descendants = [...descendants,...calculateDescendants(element.children)];
         }
       }
     });
     return descendants;
   }
-
-  function renderMenu(list, level = 1) {
+  function renderMenu(list, parent_id) {
     return list.map((item, index) => {
         if(typeof item.label === 'undefined') {
           return (
@@ -131,16 +173,19 @@ function ResponsiveDrawer(props) {
               let list = calculateDescendants(item.children)
               listOpen = list.filter((item) => item === openMenu).length > 0
             }
-            return (
-                <List key={item.label + index}>
-                  <ListItem className={listOpen ? classes.openMenuStyleOn : classes.openMenuStyleOff} component={CollisionLink} to={item.path} button key={key} onClick={() => setOpenMenu(key)}>
+              return (
+                <List key={key}>
+                  <ListItem className={listOpen ? classes.openMenuStyleOn : classes.openMenuStyleOff} button key={key} onClick={() => openNestedMenu(parent_id,key)}>
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
+                    <ListItemSecondaryAction>
+                    <ChevronDown className={`${classes.listItemIcon} ${(listOpen ? classes.listItemIconOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
+                    </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
                     <List className={`${classes.nestedMenu} ${(open)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
-                        renderMenu(item.children)
+                        renderMenu(item.children, key)
                       }
                     </List>
                   </Collapse>
@@ -149,7 +194,7 @@ function ResponsiveDrawer(props) {
           }
         }
         return (
-          <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => setOpenMenu(key)} >
+          <ListItem  component={CollisionLink} to={item.path} button key={key} >
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
             <ListItemText  className={classes.menuItemText} primary={item.label} />
           </ListItem>
@@ -163,7 +208,11 @@ function ResponsiveDrawer(props) {
 
   const list = [
     { label: 'Overview', icon: <Explore />, path: '/panel/overview', children: [
-      { label: 'Item 1', icon: <SettingsIcon />, path: '/panel/settings/item1' },  
+      { label: 'Item 1', icon: <SettingsIcon />, path: '/panel/settings/item1', children: [
+        { label: 'Item 3', icon: <SettingsIcon />, path: '/panel/settings/item3' },  
+        { label: 'Item 4', icon: <SettingsIcon />, path: '/panel/settings/item4' },
+      ]
+     },  
       { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/settings/item2' },
     ] },
     <Divider/>,
@@ -187,7 +236,7 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
           {
-            renderMenu(list)
+            renderMenu(list, '')
           }
       </List>
     </div>
