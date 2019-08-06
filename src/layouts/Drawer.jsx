@@ -43,7 +43,14 @@ const useStyles = makeStyles(theme => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
+    whiteSpace: 'nowrap',
     width: theme.spacing(7) + 1,
+    '&:hover': {
+      width: drawerWidth,
+      '& .nestedMini': {
+        paddingLeft: '1rem'
+      }
+    }
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
@@ -68,7 +75,15 @@ const useStyles = makeStyles(theme => ({
   },
   nestedMenu: {
     backgroundColor: '#e3e3e3',
-    paddingLeft: '1rem'
+    paddingLeft: '1rem',
+    transition: theme.transitions.create('padding-left', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  nestedMenuMini: {
+    backgroundColor: '#e3e3e3',
+    paddingLeft: '0rem'
   }
 }));
 
@@ -122,10 +137,12 @@ function ResponsiveDrawer(props) {
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                   </ListItem>
-                  <Collapse in={listOpen} timeout="auto" unmountOnExit className={classes.nestedMenu}>
-                    {
-                      renderMenu(item.children)
-                    }
+                  <Collapse in={listOpen} timeout="auto" unmountOnExit>
+                    <List className={`${classes.nestedMenu} ${(open)? null : `${classes.nestedMenuMini} nestedMini`}`}>
+                      {
+                        renderMenu(item.children)
+                      }
+                    </List>
                   </Collapse>
                 </List>  
             )
