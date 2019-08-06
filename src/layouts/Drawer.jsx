@@ -7,12 +7,10 @@ import Explore from '@material-ui/icons/ExploreOutlined';
 import Info from '@material-ui/icons/InfoOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
 import ChevronDown from '@material-ui/icons/KeyboardArrowDown'
-import ChevronUp from '@material-ui/icons/KeyboardArrowUp'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import PrimarySearchAppBar from './Appbar';
 import { Switch, Route } from 'react-router'
@@ -41,10 +39,6 @@ const useStyles = makeStyles(theme => ({
     }),
     '& .mini-expand-icon': {
       opacity: 1,
-      transition: theme.transitions.create('opacity', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
     }
   },
   drawerClose: {
@@ -57,10 +51,6 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(7) + 1,
     '& .mini-expand-icon': {
       opacity: 0,
-      transition: theme.transitions.create('opacity', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
     },
     '&:hover': {
       width: drawerWidth,
@@ -69,10 +59,6 @@ const useStyles = makeStyles(theme => ({
       },
       '& .mini-expand-icon': {
         opacity: 1,
-        transition: theme.transitions.create('opacity', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
       }
     }
   },
@@ -109,13 +95,18 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#e3e3e3',
     paddingLeft: '0rem'
   },
-  listItemIcon: {
+  listItemIconExpand: {
     transition: theme.transitions.create('transform', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
+    }) + " , " + theme.transitions.create('opacity', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
     }),
+    
+    transform: 'rotate(0deg)',
   },
-  listItemIconOpen: {
+  listItemIconExpandOpen: {
     transform: 'rotate(180deg)',
   },
   hidden : {
@@ -135,7 +126,7 @@ function ResponsiveDrawer(props) {
   }
 
   function openNestedMenu(parent_id,key) {
-    if(key == openMenu) {
+    if(key === openMenu) {
       return setOpenMenu(parent_id)
     }
     setOpenMenu(key)
@@ -179,7 +170,7 @@ function ResponsiveDrawer(props) {
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
-                    <ChevronDown className={`${classes.listItemIcon} ${(listOpen ? classes.listItemIconOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
+                    <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
