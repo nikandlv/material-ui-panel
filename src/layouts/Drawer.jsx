@@ -40,7 +40,10 @@ const useStyles = makeStyles(theme => ({
     }),
     '& .mini-expand-icon': {
       opacity: 1,
-    }
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: drawerWidth,
+    },
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -52,6 +55,9 @@ const useStyles = makeStyles(theme => ({
     width: theme.spacing(7) + 1,
     '& .mini-expand-icon': {
       opacity: 0,
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: drawerWidth,
     },
     '&:hover': {
       width: drawerWidth,
