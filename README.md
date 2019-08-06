@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Material UI Panel
+
+> Complete panel boilerplate and design
 
 ## Available Scripts
 
