@@ -18,7 +18,7 @@ import Overview from '../pages/Overview'
 import About from '../pages/About';
 import Settings from '../pages/Settings';
 import { Link } from 'react-router-dom'
-
+import Collapse from '@material-ui/core/Collapse'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -56,6 +56,19 @@ const useStyles = makeStyles(theme => ({
   },
   menuItemText: {
     whiteSpace: 'nowrap'
+  },
+  listItemIcon: {
+    minWidth: 40
+  },
+  openMenuStyleOn: {
+    backgroundColor: '#e3e3e3',
+  },
+  openMenuStyleOff: {
+
+  },
+  nestedMenu: {
+    backgroundColor: '#e3e3e3',
+    paddingLeft: '1rem'
   }
 }));
 
@@ -65,9 +78,66 @@ function ResponsiveDrawer(props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(true);
-
+  const [openMenu, setOpenMenu] = React.useState('');
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
+  }
+
+  function calculateDescendants(children) {
+    let descendants = [];
+    children.forEach((element,index) => {
+      index += 1
+      descendants.push(element.label + index);
+      if(typeof element.children !== 'undefined') {
+        if(element.children.length > 0) {
+          descendants = [...descendants,calculateDescendants(element.children)];
+        }
+      }
+    });
+    return descendants;
+  }
+
+  function renderMenu(list, level = 1) {
+    return list.map((item, index) => {
+        if(typeof item.label === 'undefined') {
+          return (
+            <div key={index}>
+              {item}
+            </div>
+          );
+        }
+        index += 1;
+        let key = item.label + index
+        if(typeof item.children !== 'undefined') {
+          if(item.children.length > 0) {
+            let listOpen = openMenu === (key)
+            // calculate if any Descendants is open
+            if(!listOpen) {              
+              let list = calculateDescendants(item.children)
+              listOpen = list.filter((item) => item === openMenu).length > 0
+            }
+            return (
+                <List key={item.label + index}>
+                  <ListItem className={listOpen ? classes.openMenuStyleOn : classes.openMenuStyleOff} component={CollisionLink} to={item.path} button key={key} onClick={() => setOpenMenu(key)}>
+                    <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
+                    <ListItemText  className={classes.menuItemText} primary={item.label} />
+                  </ListItem>
+                  <Collapse in={listOpen} timeout="auto" unmountOnExit className={classes.nestedMenu}>
+                    {
+                      renderMenu(item.children)
+                    }
+                  </Collapse>
+                </List>  
+            )
+          }
+        }
+        return (
+          <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => setOpenMenu(key)} >
+            <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
+            <ListItemText  className={classes.menuItemText} primary={item.label} />
+          </ListItem>
+        )}
+      )
   }
 
   function handleDrawerOpen() {
@@ -75,10 +145,13 @@ function ResponsiveDrawer(props) {
   }
 
   const list = [
-    { label: 'Overview', icon: <Explore />, path: '/panel/overview' },
+    { label: 'Overview', icon: <Explore />, path: '/panel/overview', children: [
+      { label: 'Item 1', icon: <SettingsIcon />, path: '/panel/settings/item1' },  
+      { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/settings/item2' },
+    ] },
     <Divider/>,
-    { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings' },
-    { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about' },
+    { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
+    { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about', children: [] },
   ]
 
   const panelRoutes = {
@@ -96,21 +169,9 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {list.map((item, index) => {
-          if(typeof item.label === 'undefined') {
-            return (
-              <div key={index}>
-                {item}
-              </div>
-            );
+          {
+            renderMenu(list)
           }
-          return (
-            <ListItem component={CollisionLink} to={item.path} button key={item.label + index}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText className={classes.menuItemText} primary={item.label} />
-            </ListItem>
-          )}
-        )}
       </List>
     </div>
   );
@@ -156,7 +217,7 @@ function ResponsiveDrawer(props) {
               Object.keys(panelRoutes).map((group) => {
                 return panelRoutes[group].map((route) => {
                   return (
-                    <Route path={route.path} key={route.path} render={route.render} exact/>
+                    <Route path={route.path} key={'panel-route-' + route.path} render={route.render} exact/>
                   )
                 })
               }) 
