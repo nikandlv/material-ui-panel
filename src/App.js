@@ -17,14 +17,13 @@ function App() {
   return (
     <div dir="ltr">
       <BrowserRouter>
+    <StylesProvider jss={jss}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
       <Switch>
         <Route path='/' render={() => <Visit />} exact/>
         <Route path='/panel' render={() => <ResponsiveDrawer />}/>
       </Switch>
-    <StylesProvider jss={jss}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        
     </ThemeProvider>
       </StylesProvider>
       </BrowserRouter>
