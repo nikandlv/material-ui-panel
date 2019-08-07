@@ -11,7 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import PrimarySearchAppBar from './Appbar';
+import MainAppbar from './Appbar';
 import { Switch, Route } from 'react-router'
 import About from '../pages/About';
 import Settings from '../pages/Settings';
@@ -20,6 +20,11 @@ import Collapse from '@material-ui/core/Collapse'
 import { ListItemSecondaryAction } from '@material-ui/core';
 import NotFound from '../pages/NotFound';
 import Item from '../pages/Item';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailIcon from '@material-ui/icons/Mail';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import IconButton from '@material-ui/core/IconButton';
+import Badge from '@material-ui/core/Badge';
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -146,14 +151,34 @@ const panelRoutes = {
 
 const appbarActions = () => {
   return (
-    <div>
-      a
-    </div>
+    <React.Fragment>
+      <IconButton aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={17} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+    </React.Fragment>
   )
 };
 
 const panelGlobals = () => {
-
+  return (
+    <div>
+    </div>
+  )
 }
 
 function calculateDescendants(children) {
@@ -298,7 +323,8 @@ function PanelBaseline(props) {
 
   return (
     <div className={classes.root}>
-      <PrimarySearchAppBar setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
+      {panelGlobals()}
+      <MainAppbar appbarActions={appbarActions} setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
