@@ -143,6 +143,21 @@ const panelRoutes = {
     { title: 'About', path: '/panel/about', render: props => <About {...props}/> }
   ]
 }
+
+function calculateDescendants(children) {
+  let descendants = [];
+  children.forEach((element,index) => {
+    index += 1
+    descendants.push(element.label + index);
+    if(typeof element.children !== 'undefined') {
+      if(element.children.length > 0) {
+        descendants = [...descendants,...calculateDescendants(element.children)];
+      }
+    }
+  });
+  return descendants;
+}
+
 function ResponsiveDrawer(props) {
   const { container } = props;
   const classes = useStyles();
@@ -161,6 +176,7 @@ function ResponsiveDrawer(props) {
   React.useEffect(() => {
     document.title = title;
   }, [title])
+
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
@@ -172,19 +188,6 @@ function ResponsiveDrawer(props) {
     setOpenMenu(key)
   }
 
-  function calculateDescendants(children) {
-    let descendants = [];
-    children.forEach((element,index) => {
-      index += 1
-      descendants.push(element.label + index);
-      if(typeof element.children !== 'undefined') {
-        if(element.children.length > 0) {
-          descendants = [...descendants,...calculateDescendants(element.children)];
-        }
-      }
-    });
-    return descendants;
-  }
   function renderMenu(list, parent_id) {
     return list.map((item, index) => {
         if(typeof item.label === 'undefined') {
