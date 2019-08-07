@@ -83,10 +83,10 @@ const useStyles = makeStyles(theme => ({
   listItemIcon: {
     minWidth: 40
   },
-  openMenuStyleOn: {
+  currentOpenMenuStyleOn: {
     backgroundColor: '#e3e3e3',
   },
-  openMenuStyleOff: {
+  currentOpenMenuStyleOff: {
 
   },
   nestedMenu: {
@@ -158,13 +158,13 @@ function calculateDescendants(children) {
   return descendants;
 }
 
-function ResponsiveDrawer(props) {
+function PanelBaseline(props) {
   const { container } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [open, setOpen] = React.useState(true);
-  const [openMenu, setOpenMenu] = React.useState('');
+  const [miniModeOpen, setMiniModeOpen] = React.useState(true);
+  const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
   const [title, setTitle] = React.useState('Not found');
   const location = window.location.pathname
   Object.keys(panelRoutes).map((group_key) => {
@@ -179,14 +179,14 @@ function ResponsiveDrawer(props) {
     document.title = title;
   }, [title])
 
-  if(openMenu === '') {
+  if(currentOpenMenu === '') {
     list.map((item, index) => {
       let list = calculateDescendants([item])
       Object.keys(list).map((current) => {
         if(typeof list[current].path !== 'undefined') {
           let route = list[current];
-          if(location === route.path && openMenu !== current) {
-            setOpenMenu(current)
+          if(location === route.path && currentOpenMenu !== current) {
+            setCurrentOpenMenu(current)
           }
         }
       })
@@ -197,10 +197,10 @@ function ResponsiveDrawer(props) {
   }
 
   function openNestedMenu(parent_id,key) {
-    if(key === openMenu) {
-      return setOpenMenu(parent_id)
+    if(key === currentOpenMenu) {
+      return setCurrentOpenMenu(parent_id)
     }
-    setOpenMenu(key)
+    setCurrentOpenMenu(key)
   }
 
   function renderMenu(list, parent_id) {
@@ -216,7 +216,7 @@ function ResponsiveDrawer(props) {
         let key = item.label + index
         if(typeof item.children !== 'undefined') {
           if(item.children.length > 0) {
-            let listOpen = openMenu === (key)
+            let listOpen = currentOpenMenu === (key)
             // calculate if any Descendants is open
             if(!listOpen) {              
               let list = calculateDescendants(item.children)
@@ -224,20 +224,20 @@ function ResponsiveDrawer(props) {
                 if(listOpen) {
                   return
                 }
-                listOpen = current === openMenu
+                listOpen = current === currentOpenMenu
               })
             }
               return (
                 <List key={key}>
-                  <ListItem className={listOpen ? classes.openMenuStyleOn : classes.openMenuStyleOff} button key={key} onClick={() => openNestedMenu(parent_id,key)}>
+                  <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => openNestedMenu(parent_id,key)}>
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
-                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
+                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${miniModeOpen? 'open' : null}`}/>
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
-                    <List className={`${classes.nestedMenu} ${(open)? null : `${classes.nestedMenuMini} nestedMini`}`}>
+                    <List className={`${classes.nestedMenu} ${(miniModeOpen)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
                         renderMenu(item.children, key)
                       }
@@ -249,7 +249,7 @@ function ResponsiveDrawer(props) {
         }
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
-            setOpenMenu(parent_id)
+            setCurrentOpenMenu(parent_id)
             setTitle('')
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
@@ -260,7 +260,7 @@ function ResponsiveDrawer(props) {
   }
 
   function handleDrawerOpen() {
-    setOpen(!open);
+    setMiniModeOpen(!miniModeOpen);
   }
 
   const CollisionLink = React.forwardRef((props, ref) => (
@@ -280,7 +280,7 @@ function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
-      <PrimarySearchAppBar setMini={handleDrawerOpen} mini={open} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
+      <PrimarySearchAppBar setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
@@ -289,9 +289,9 @@ function ResponsiveDrawer(props) {
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}
             onClose={handleDrawerToggle}
-            className={open?classes.drawerOpen:classes.drawerClose}
+            className={miniModeOpen?classes.drawerOpen:classes.drawerClose}
             classes={{
-                paper: open?classes.drawerOpen:classes.drawerClose,
+                paper: miniModeOpen?classes.drawerOpen:classes.drawerClose,
               }}
             ModalProps={{
               keepMounted: true, // Better open performance on mobile.
@@ -302,9 +302,9 @@ function ResponsiveDrawer(props) {
         </Hidden>
         <Hidden xsDown implementation="css">
           <Drawer
-            className={open?classes.drawerOpen:classes.drawerClose}
+            className={miniModeOpen?classes.drawerOpen:classes.drawerClose}
             classes={{
-                paper: open?classes.drawerOpen:classes.drawerClose,
+                paper: miniModeOpen?classes.drawerOpen:classes.drawerClose,
               }}
             variant="permanent"
             open
@@ -333,4 +333,4 @@ function ResponsiveDrawer(props) {
 }
 
 
-export default ResponsiveDrawer;
+export default PanelBaseline;

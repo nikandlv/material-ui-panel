@@ -4,7 +4,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset, ThemeProvider } from '@material-ui/styles';
-import ResponsiveDrawer from './layouts/Drawer';
+import PanelBaseline from './layouts/PanelBaseline';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { createMuiTheme } from '@material-ui/core';
@@ -22,7 +22,7 @@ function App() {
         <CssBaseline />
       <Switch>
         <Route path='/' render={() => <Visit />} exact/>
-        <Route path='/panel' render={() => <ResponsiveDrawer />}/>
+        <Route path='/panel' render={() => <PanelBaseline />}/>
       </Switch>
     </ThemeProvider>
       </StylesProvider>
