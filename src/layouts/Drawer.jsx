@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -121,6 +120,29 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const list = [
+  { label: 'Overview', icon: <Explore />, path: '', children: [
+    { label: 'Item 1', icon: <SettingsIcon />, path: '', children: [
+      { label: 'Item 3', icon: <SettingsIcon />, path: '/panel/item3' },  
+      { label: 'Item 4', icon: <SettingsIcon />, path: '/panel/item4' },
+    ]
+   },  
+    { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
+  ] },
+  <Divider/>,
+  { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
+  { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about', children: [] },
+]
+
+const panelRoutes = {
+  Main: [
+    { title: 'Item 2', path: '/panel/item2', render: props => <Item number={2} {...props}/> },
+    { title: 'Item 3', path: '/panel/item3', render: props => <Item number={3} {...props}/> },
+    { title: 'Item 4', path: '/panel/item4', render: props => <Item number={4} {...props}/> },
+    { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
+    { title: 'About', path: '/panel/about', render: props => <About {...props}/> }
+  ]
+}
 function ResponsiveDrawer(props) {
   const { container } = props;
   const classes = useStyles();
@@ -128,6 +150,17 @@ function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(true);
   const [openMenu, setOpenMenu] = React.useState('');
+  const [title, setTitle] = React.useState('Not found');
+  Object.keys(panelRoutes).map((group_key) => {
+    return panelRoutes[group_key].forEach(route => {
+      if(window.location.href.includes(route.path) && title !== route.title) {
+        setTitle(route.title)
+      }
+    });
+  });
+  React.useEffect(() => {
+    document.title = title;
+  }, [title])
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
@@ -192,7 +225,9 @@ function ResponsiveDrawer(props) {
           }
         }
         return (
-          <ListItem  component={CollisionLink} to={item.path} button key={key} >
+          <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
+            setTitle('')
+          }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
             <ListItemText  className={classes.menuItemText} primary={item.label} />
           </ListItem>
@@ -204,29 +239,6 @@ function ResponsiveDrawer(props) {
     setOpen(!open);
   }
 
-  const list = [
-    { label: 'Overview', icon: <Explore />, path: '', children: [
-      { label: 'Item 1', icon: <SettingsIcon />, path: '', children: [
-        { label: 'Item 3', icon: <SettingsIcon />, path: '/panel/item3' },  
-        { label: 'Item 4', icon: <SettingsIcon />, path: '/panel/item4' },
-      ]
-     },  
-      { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
-    ] },
-    <Divider/>,
-    { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
-    { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about', children: [] },
-  ]
-
-  const panelRoutes = {
-    Main: [
-      {  path: '/panel/item2', render: props => <Item number={2} {...props}/> },
-      {  path: '/panel/item3', render: props => <Item number={3} {...props}/> },
-      {  path: '/panel/item4', render: props => <Item number={4} {...props}/> },
-      {  path: '/panel/settings', render: props => <Settings {...props}/> },
-      {  path: '/panel/about', render: props => <About {...props}/> }
-    ]
-  }
   const CollisionLink = React.forwardRef((props, ref) => (
     <Link innerRef={ref} {...props} />
   ));
