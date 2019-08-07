@@ -5,9 +5,10 @@ import { create } from 'jss';
 import rtl from 'jss-rtl';
 import { StylesProvider, jssPreset, ThemeProvider } from '@material-ui/styles';
 import ResponsiveDrawer from './layouts/Drawer';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import { createMuiTheme } from '@material-ui/core';
+import Visit from './pages/Visit';
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 const theme = createMuiTheme({
   direction: 'ltr',
@@ -15,12 +16,15 @@ const theme = createMuiTheme({
 function App() {
   return (
     <div dir="ltr">
-      <BrowserRouter
->
+      <BrowserRouter>
+      <Switch>
+        <Route path='/' render={() => <Visit />} exact/>
+        <Route path='/panel' render={() => <ResponsiveDrawer />}/>
+      </Switch>
     <StylesProvider jss={jss}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ResponsiveDrawer />
+        
     </ThemeProvider>
       </StylesProvider>
       </BrowserRouter>
