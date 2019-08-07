@@ -2,6 +2,8 @@
 
 > Complete panel boilerplate and design
 
+A free and open source web panel written in react and using material-ui
+
 ## Available Scripts
 
 In the project directory, you can run:
