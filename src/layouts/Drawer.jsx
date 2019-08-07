@@ -145,13 +145,13 @@ const panelRoutes = {
 }
 
 function calculateDescendants(children) {
-  let descendants = [];
+  let descendants = {};
   children.forEach((element,index) => {
     index += 1
-    descendants.push(element.label + index);
+    descendants[element.label + index] = element;
     if(typeof element.children !== 'undefined') {
       if(element.children.length > 0) {
-        descendants = [...descendants,...calculateDescendants(element.children)];
+        descendants = {...descendants,...calculateDescendants(element.children)};
       }
     }
   });
@@ -166,17 +166,32 @@ function ResponsiveDrawer(props) {
   const [open, setOpen] = React.useState(true);
   const [openMenu, setOpenMenu] = React.useState('');
   const [title, setTitle] = React.useState('Not found');
+  const location = window.location.pathname
   Object.keys(panelRoutes).map((group_key) => {
     return panelRoutes[group_key].forEach(route => {
-      if(window.location.href.includes(route.path) && title !== route.title) {
+      if(location === route.path && title !== route.title) {
         setTitle(route.title)
       }
     });
   });
+  
   React.useEffect(() => {
     document.title = title;
   }, [title])
 
+  if(openMenu === '') {
+    list.map((item, index) => {
+      let list = calculateDescendants([item])
+      Object.keys(list).map((current) => {
+        if(typeof list[current].path !== 'undefined') {
+          let route = list[current];
+          if(location === route.path && openMenu !== current) {
+            setOpenMenu(current)
+          }
+        }
+      })
+    })
+  }
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
@@ -205,7 +220,12 @@ function ResponsiveDrawer(props) {
             // calculate if any Descendants is open
             if(!listOpen) {              
               let list = calculateDescendants(item.children)
-              listOpen = list.filter((item) => item === openMenu).length > 0
+              Object.keys(list).map((current) => {
+                if(listOpen) {
+                  return
+                }
+                listOpen = current === openMenu
+              })
             }
               return (
                 <List key={key}>
@@ -213,7 +233,7 @@ function ResponsiveDrawer(props) {
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
-                    <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
+                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${open? 'open' : null}`}/>
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
@@ -229,6 +249,7 @@ function ResponsiveDrawer(props) {
         }
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
+            setOpenMenu('')
             setTitle('')
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
