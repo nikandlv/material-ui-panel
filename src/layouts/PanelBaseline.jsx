@@ -144,6 +144,18 @@ const panelRoutes = {
   ]
 }
 
+const appbarActions = () => {
+  return (
+    <div>
+      a
+    </div>
+  )
+};
+
+const panelGlobals = () => {
+
+}
+
 function calculateDescendants(children) {
   let descendants = {};
   children.forEach((element,index) => {
@@ -166,6 +178,7 @@ function PanelBaseline(props) {
   const [miniModeOpen, setMiniModeOpen] = React.useState(true);
   const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
   const [title, setTitle] = React.useState('Not found');
+  const [firstRender, setFirstRender] = React.useState(true)
   const location = window.location.pathname
   Object.keys(panelRoutes).map((group_key) => {
     return panelRoutes[group_key].forEach(route => {
@@ -178,25 +191,30 @@ function PanelBaseline(props) {
   React.useEffect(() => {
     document.title = title;
   }, [title])
-
-  if(currentOpenMenu === '') {
-    list.map((item, index) => {
-      let list = calculateDescendants([item])
-      Object.keys(list).map((current) => {
-        if(typeof list[current].path !== 'undefined') {
-          let route = list[current];
-          if(location === route.path && currentOpenMenu !== current) {
-            setCurrentOpenMenu(current)
+  if(firstRender) {
+    if(currentOpenMenu === '') {
+      list.map((item, index) => {
+        let list = calculateDescendants([item])
+        Object.keys(list).map((current) => {
+          if(typeof list[current].path !== 'undefined') {
+            let route = list[current];
+            if(location === route.path && currentOpenMenu !== current) {
+              setCurrentOpenMenu(current)
+            }
           }
-        }
+        })
       })
-    })
+    }
+   setFirstRender(false)
   }
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
   }
 
   function openNestedMenu(parent_id,key) {
+    if(parent_id === '' && currentOpenMenu !== '') {
+      return setCurrentOpenMenu('')
+    }
     if(key === currentOpenMenu) {
       return setCurrentOpenMenu(parent_id)
     }
