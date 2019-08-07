@@ -175,7 +175,7 @@ export default function MainAppbar(props) {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {props.appbarActions()}
+            {props.appbarActions.map((Item,index) => <Item key={index} />)}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton

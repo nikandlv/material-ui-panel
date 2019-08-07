@@ -323,8 +323,8 @@ function PanelBaseline(props) {
 
   return (
     <div className={classes.root}>
-      {panelGlobals()}
-      <MainAppbar appbarActions={appbarActions} setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
+      {[panelGlobals].map((Item,index) => <Item key={index} />)}
+      <MainAppbar appbarActions={[appbarActions]} setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
