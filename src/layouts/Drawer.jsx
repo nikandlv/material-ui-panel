@@ -249,7 +249,7 @@ function ResponsiveDrawer(props) {
         }
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
-            setOpenMenu('')
+            setOpenMenu(parent_id)
             setTitle('')
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
