@@ -11,7 +11,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import { Link as RouteLink } from 'react-router-dom'
+const CollisionLink = React.forwardRef((props, ref) => (
+  <RouteLink innerRef={ref} {...props} />
+));
 const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
@@ -112,6 +115,8 @@ export default function SignUp() {
                 variant="outlined"
                 color="primary"
                 className={classes.submit}
+                component={CollisionLink}
+                to="/signin"
               >
               Sign In
               </Button>
@@ -123,6 +128,8 @@ export default function SignUp() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                component={CollisionLink}
+                to="/panel"
                 >
                 Sign Up
               </Button>
