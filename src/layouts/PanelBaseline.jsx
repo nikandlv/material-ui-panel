@@ -279,7 +279,7 @@ function PanelBaseline(props) {
               if(typeof parent === 'undefined') {
                 parent = '';
               }
-              let open = key === currentOpenMenu ? parent : key
+              let open = listOpen ? parent : key
               return (
                 <List className={classes.list} key={key}>
                   <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => setCurrentOpenMenu(open)}>
