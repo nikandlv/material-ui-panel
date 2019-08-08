@@ -122,6 +122,9 @@ const useStyles = makeStyles(theme => ({
   },
   hidden : {
     display: 'none'
+  },
+  list: {
+    padding:'unset'
   }
 }));
 
@@ -275,7 +278,7 @@ function PanelBaseline(props) {
               })
             }
               return (
-                <List key={key}>
+                <List className={classes.list} key={key}>
                   <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => openNestedMenu(parent_id,key)}>
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
@@ -284,7 +287,7 @@ function PanelBaseline(props) {
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
-                    <List className={`${classes.nestedMenu} ${(miniModeOpen)? null : `${classes.nestedMenuMini} nestedMini`}`}>
+                    <List className={`${classes.list} ${classes.nestedMenu} ${(miniModeOpen)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
                         renderMenu(item.children, key)
                       }
