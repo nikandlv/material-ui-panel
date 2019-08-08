@@ -1,22 +1,19 @@
 # Material UI Panel
 
-> Complete panel boilerplate and design
+> An example panel boilerplate and design for production
 
-A free and open source web panel written in react and using material-ui
+An open source web panel written in react and using material-ui
 
 ### Motivation
 
-I needed a good and customizable web panel to use on my projects and some clients
+I needed a good and customizable web panel to use on my projects and some clients projects
 
 ### Setup
 
 ```
-
 npm install
 
 npm start
-
-
 ```
 
 It will automatically open `http://localhost:3000`
