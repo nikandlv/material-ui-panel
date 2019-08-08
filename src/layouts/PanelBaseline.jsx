@@ -5,6 +5,9 @@ import Hidden from '@material-ui/core/Hidden';
 import Explore from '@material-ui/icons/ExploreOutlined';
 import Info from '@material-ui/icons/InfoOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
+import AddIcon from '@material-ui/icons/AddBoxOutlined';
+import ListIcon from '@material-ui/icons/ListAltOutlined';
+import UsersIcon from '@material-ui/icons/PeopleOutlineOutlined'
 import ChevronDown from '@material-ui/icons/KeyboardArrowDown'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -137,9 +140,9 @@ const list = [
    },  
     { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
   ] },
-  { label: 'Users', icon: <SettingsIcon />, path: '', children: [
-    { label: 'List', icon: <SettingsIcon />, path: '/panel/users/list' },  
-    { label: 'Add', icon: <SettingsIcon />, path: '/panel/users/list' },
+  { label: 'Users', icon: <UsersIcon />, path: '', children: [
+    { label: 'List', icon: <ListIcon />, path: '/panel/users/list' },  
+    { label: 'Add', icon: <AddIcon />, path: '/panel/users/add' },
   ] },
   <Divider/>,
   { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
