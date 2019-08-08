@@ -19,6 +19,8 @@ I needed a good and customizable web panel to use on my projects and some client
 * Mini Mode
 * And more...
 
+### Setup and development
+
 ```
 npm install
 
