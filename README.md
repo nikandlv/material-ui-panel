@@ -8,7 +8,16 @@ An open source web panel written in react and using material-ui
 
 I needed a good and customizable web panel to use on my projects and some clients projects
 
-### Setup
+### Features
+
+* Fast and simple accordion menu
+* Simple page routing switch
+* Easy drawer item structure and multi-level accordion
+* Login and signup pages
+* Reactive title
+* Easy actionbar customization
+* Mini Mode
+* And more...
 
 ```
 npm install
