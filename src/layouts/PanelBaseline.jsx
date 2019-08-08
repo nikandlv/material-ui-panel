@@ -127,7 +127,8 @@ const useStyles = makeStyles(theme => ({
     display: 'none'
   },
   list: {
-    padding:'unset'
+    paddingTop:'unset',
+    paddingBottom:'unset'
   }
 }));
 
