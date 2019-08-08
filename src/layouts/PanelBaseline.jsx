@@ -129,6 +129,10 @@ const list = [
    },  
     { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
   ] },
+  { label: 'Users', icon: <SettingsIcon />, path: '', children: [
+    { label: 'List', icon: <SettingsIcon />, path: '/panel/users/list' },  
+    { label: 'Add', icon: <SettingsIcon />, path: '/panel/users/list' },
+  ] },
   <Divider/>,
   { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
   { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about', children: [] },
