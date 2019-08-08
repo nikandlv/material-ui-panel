@@ -104,22 +104,31 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={6}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                color="primary"
+                className={classes.submit}
+              >
+              Sign In
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+                >
+                Sign Up
+              </Button>
             </Grid>
           </Grid>
+          
         </form>
       </div>
     </Container>

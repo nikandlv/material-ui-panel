@@ -77,15 +77,30 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={6}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="outlined"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign Up
+              </Button>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign In
+              </Button>
+            </Grid>
+          </Grid>
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
@@ -93,9 +108,6 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
             </Grid>
           </Grid>
         </form>
