@@ -142,11 +142,13 @@ const list = [
     { label: 'Item 2', icon: <SettingsIcon />, path: '/panel/item2' },
   ] },
   { label: 'Users', icon: <UsersIcon />, path: '', children: [
-    { label: 'List', icon: <ListIcon />, path: '/panel/users/list' },  
-    { label: 'Add', icon: <AddIcon />, path: '/panel/users/add' },
+    { label: 'List all users', icon: <ListIcon />, path: '/panel/users/list' },  
+    { label: 'Add new user', icon: <AddIcon />, path: '/panel/users/add' },
   ] },
   <Divider/>,
-  { label: 'Settings', icon: <SettingsIcon />, path: '/panel/settings', children: [] },
+  { label: 'Settings', icon: <SettingsIcon />, path: '', children: [
+    { label: 'General', icon: <ListIcon />, path: '/panel/settings/general' },  
+  ] },
   { label: 'Version 0.0.1', icon: <Info />, path: '/panel/about', children: [] },
 ]
 
@@ -205,7 +207,7 @@ function calculateDescendants(children) {
   });
   return descendants;
 }
-
+let menuCache = {};
 function PanelBaseline(props) {
   const { container } = props;
   const classes = useStyles();
@@ -247,17 +249,8 @@ function PanelBaseline(props) {
     setMobileOpen(!mobileOpen);
   }
 
-  function openNestedMenu(parent_id,key) {
-    if(parent_id === '' && currentOpenMenu !== '') {
-      return setCurrentOpenMenu('')
-    }
-    if(key === currentOpenMenu) {
-      return setCurrentOpenMenu(parent_id)
-    }
-    setCurrentOpenMenu(key)
-  }
 
-  function renderMenu(list, parent_id) {
+  function renderMenu(list, parents) {
     return list.map((item, index) => {
         if(typeof item.label === 'undefined') {
           return (
@@ -268,10 +261,11 @@ function PanelBaseline(props) {
         }
         index += 1;
         let key = item.label + index
+        const parent_id = [...parents, key]
         if(typeof item.children !== 'undefined') {
           if(item.children.length > 0) {
-            let listOpen = currentOpenMenu === (key)
             // calculate if any Descendants is open
+            let listOpen = currentOpenMenu === (key)
             if(!listOpen) {              
               let list = calculateDescendants(item.children)
               Object.keys(list).map((current) => {
@@ -281,9 +275,14 @@ function PanelBaseline(props) {
                 listOpen = current === currentOpenMenu
               })
             }
+              let parent = parent_id[parent_id.indexOf(key) - 1];
+              if(typeof parent === 'undefined') {
+                parent = '';
+              }
+              let open = key === currentOpenMenu ? parent : key
               return (
                 <List className={classes.list} key={key}>
-                  <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => openNestedMenu(parent_id,key)}>
+                  <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => setCurrentOpenMenu(open)}>
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
@@ -293,7 +292,7 @@ function PanelBaseline(props) {
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
                     <List className={`${classes.list} ${classes.nestedMenu} ${(miniModeOpen)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
-                        renderMenu(item.children, key)
+                        renderMenu(item.children, parent_id)
                       }
                     </List>
                   </Collapse>
@@ -303,7 +302,7 @@ function PanelBaseline(props) {
         }
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
-            setCurrentOpenMenu(parent_id)
+            setCurrentOpenMenu(parent_id[parent_id.length-1])
             setTitle('')
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
@@ -326,7 +325,7 @@ function PanelBaseline(props) {
       <Divider />
       <List>
           {
-            renderMenu(list, '')
+            renderMenu(list, [''])
           }
       </List>
     </div>
