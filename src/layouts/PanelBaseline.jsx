@@ -157,6 +157,8 @@ const panelRoutes = {
     { title: 'Item 2', path: '/panel/item2', render: props => <Item number={2} {...props}/> },
     { title: 'Item 3', path: '/panel/item3', render: props => <Item number={3} {...props}/> },
     { title: 'Item 4', path: '/panel/item4', render: props => <Item number={4} {...props}/> },
+    { title: 'List all users', path: '/panel/users/list', render: props => <Item number={'List all users'} {...props}/> },
+    { title: 'Add new user', path: '/panel/users/add', render: props => <Item number={'Add new user'} {...props}/> },
     { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
     { title: 'About', path: '/panel/about', render: props => <About {...props}/> }
   ]
@@ -207,7 +209,6 @@ function calculateDescendants(children) {
   });
   return descendants;
 }
-let menuCache = {};
 function PanelBaseline(props) {
   const { container } = props;
   const classes = useStyles();
