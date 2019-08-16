@@ -225,14 +225,15 @@ function PanelBaseline(props) {
     return panelRoutes[group_key].forEach(route => {
       console.log(location,route.path)
       if(route.path.includes('/:')) {
-        let shared = ''
+        let testemony = ''
         route.path.split('/:').forEach((element, key) => {
           if(key === 0) {
-            shared = element+'/'
+            testemony = element+'/'
             return
           }
+          testemony += location.split(shared)[1]
         });
-        let testemony = location.replace(location.split(shared)[1],':'+id)
+        //let testemony = location.replace(location.split(shared)[1],':'+id)
         console.log(testemony,route.path.split('/:'))
         if(testemony === route.path && title !== route.title) {
           setTitle(route.title)
