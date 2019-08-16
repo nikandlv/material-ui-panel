@@ -162,7 +162,7 @@ const panelRoutes = {
     { title: 'List all users', path: '/panel/users/list', render: props => <Item number={'List all users'} {...props}/> },
     { title: 'Add new user', path: '/panel/users/add', render: props => <Item number={'Add new user'} {...props}/> },
     { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
-    { title: 'About', path: '/panel/about', render: props => <About {...props}/> }
+    { title: 'About', path: '/panel/about/:id', render: props => <About {...props}/> }
   ]
 }
 
@@ -221,9 +221,17 @@ function PanelBaseline(props) {
   const [title, setTitle] = React.useState('Not found');
   const [firstRender, setFirstRender] = React.useState(true)
   const location = window.location.pathname
-  console.log(props)
   Object.keys(panelRoutes).map((group_key) => {
     return panelRoutes[group_key].forEach(route => {
+      console.log(location,route.path)
+      if(route.path.includes('/:')) {
+        let id = route.path.split('/:')[1]
+        let shared = route.path.split('/:')[0]+'/'
+        let testemony = location.replace(location.split(shared)[1],':'+id)
+        if(testemony === route.path && title !== route.title) {
+          setTitle(route.title)
+        }
+      }
       if(location === route.path && title !== route.title) {
         setTitle(route.title)
       }
