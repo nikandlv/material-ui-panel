@@ -28,6 +28,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
+import {withRouter} from 'react-router-dom';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -219,6 +221,7 @@ function PanelBaseline(props) {
   const [title, setTitle] = React.useState('Not found');
   const [firstRender, setFirstRender] = React.useState(true)
   const location = window.location.pathname
+  console.log(props)
   Object.keys(panelRoutes).map((group_key) => {
     return panelRoutes[group_key].forEach(route => {
       if(location === route.path && title !== route.title) {
@@ -388,4 +391,4 @@ function PanelBaseline(props) {
 }
 
 
-export default PanelBaseline;
+export default withRouter(props => <PanelBaseline {...props}/>)

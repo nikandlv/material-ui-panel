@@ -14,7 +14,7 @@ const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 const theme = createMuiTheme({
   direction: 'ltr',
 });
-function App() {
+function App(props) {
   return (
     <div dir="ltr">
       <BrowserRouter>
@@ -25,7 +25,7 @@ function App() {
         <Route path='/' render={() => <SignIn />} exact/>
         <Route path='/signin' render={() => <SignIn />} exact/>
         <Route path='/signup' render={() => <SignUp />} exact/>
-        <Route path='/panel' render={() => <PanelBaseline />}/>
+        <Route path='/panel' render={() => <PanelBaseline {...props} />}/>
       </Switch>
     </ThemeProvider>
       </StylesProvider>
