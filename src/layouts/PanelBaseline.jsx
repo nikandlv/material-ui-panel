@@ -162,7 +162,7 @@ const panelRoutes = {
     { title: 'List all users', path: '/panel/users/list', render: props => <Item number={'List all users'} {...props}/> },
     { title: 'Add new user', path: '/panel/users/add', render: props => <Item number={'Add new user'} {...props}/> },
     { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
-    { title: 'About', path: '/panel/about/:id/:test', render: props => <About {...props}/> }
+    { title: 'About', path: '/panel/about/:id', render: props => <About {...props}/> }
   ]
 }
 
@@ -211,6 +211,23 @@ function calculateDescendants(children) {
   });
   return descendants;
 }
+
+function RouteAware(props) {
+  Object.keys(panelRoutes).forEach(group => {
+    let route = panelRoutes[group].filter((item) => item.path === props.match.path)
+    document.title = route[0].title
+  });
+  return (
+    <React.Fragment>
+      {props.children()}
+    </React.Fragment>
+  )
+}
+
+const RouteAwareComponent = withRouter(props => (
+<RouteAware {...props}/>
+  ))
+
 function PanelBaseline(props) {
   const { container } = props;
   const classes = useStyles();
@@ -218,36 +235,10 @@ function PanelBaseline(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [miniModeOpen, setMiniModeOpen] = React.useState(true);
   const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
-  const [title, setTitle] = React.useState('Not found');
   const [firstRender, setFirstRender] = React.useState(true)
   const location = window.location.pathname
-  Object.keys(panelRoutes).map((group_key) => {
-    return panelRoutes[group_key].forEach(route => {
-      console.log(location,route.path)
-      if(route.path.includes('/:')) {
-        let testemony = ''
-        route.path.split('/:').forEach((element, key) => {
-          if(key === 0) {
-            testemony = element+'/'
-            return
-          }
-          testemony += location.split(shared)[1]
-        });
-        //let testemony = location.replace(location.split(shared)[1],':'+id)
-        console.log(testemony,route.path.split('/:'))
-        if(testemony === route.path && title !== route.title) {
-          setTitle(route.title)
-        }
-      }
-      if(location === route.path && title !== route.title) {
-        setTitle(route.title)
-      }
-    });
-  });
-  
-  React.useEffect(() => {
-    document.title = title;
-  }, [title])
+
+
   if(firstRender) {
     if(currentOpenMenu === '') {
       list.map((item, index) => {
@@ -322,7 +313,6 @@ function PanelBaseline(props) {
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
             setCurrentOpenMenu(parent_id[parent_id.length-1])
-            setTitle('')
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
             <ListItemText  className={classes.menuItemText} primary={item.label} />
@@ -392,7 +382,7 @@ function PanelBaseline(props) {
               Object.keys(panelRoutes).map((group) => {
                 return panelRoutes[group].map((route) => {
                   return (
-                    <Route path={route.path} key={'panel-route-' + route.path} render={route.render} exact/>
+                    <Route path={route.path} key={'panel-route-' + route.path} render={(props) => <RouteAwareComponent {...props}>{route.render}</RouteAwareComponent>} exact/>
                   )
                 })
               })
@@ -406,4 +396,4 @@ function PanelBaseline(props) {
 }
 
 
-export default withRouter(props => <PanelBaseline {...props}/>)
+export default PanelBaseline
