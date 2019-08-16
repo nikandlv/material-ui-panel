@@ -28,6 +28,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
+import {withRouter} from 'react-router-dom';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -157,8 +159,10 @@ const panelRoutes = {
     { title: 'Item 2', path: '/panel/item2', render: props => <Item number={2} {...props}/> },
     { title: 'Item 3', path: '/panel/item3', render: props => <Item number={3} {...props}/> },
     { title: 'Item 4', path: '/panel/item4', render: props => <Item number={4} {...props}/> },
+    { title: 'List all users', path: '/panel/users/list', render: props => <Item number={'List all users'} {...props}/> },
+    { title: 'Add new user', path: '/panel/users/add', render: props => <Item number={'Add new user'} {...props}/> },
     { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
-    { title: 'About', path: '/panel/about', render: props => <About {...props}/> }
+    { title: 'About', path: '/panel/about/:id', render: props => <About {...props}/> }
   ]
 }
 
@@ -207,7 +211,6 @@ function calculateDescendants(children) {
   });
   return descendants;
 }
-let menuCache = {};
 function PanelBaseline(props) {
   const { container } = props;
   const classes = useStyles();
@@ -220,6 +223,15 @@ function PanelBaseline(props) {
   const location = window.location.pathname
   Object.keys(panelRoutes).map((group_key) => {
     return panelRoutes[group_key].forEach(route => {
+      console.log(location,route.path)
+      if(route.path.includes('/:')) {
+        let id = route.path.split('/:')[1]
+        let shared = route.path.split('/:')[0]+'/'
+        let testemony = location.replace(location.split(shared)[1],':'+id)
+        if(testemony === route.path && title !== route.title) {
+          setTitle(route.title)
+        }
+      }
       if(location === route.path && title !== route.title) {
         setTitle(route.title)
       }
@@ -387,4 +399,4 @@ function PanelBaseline(props) {
 }
 
 
-export default PanelBaseline;
+export default withRouter(props => <PanelBaseline {...props}/>)
