@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Typography, CardContent, Card } from '@material-ui/core';
+import { Typography, CardContent, Card } from '@material-ui/core';
 export default function About() {
     return (
         <div>
