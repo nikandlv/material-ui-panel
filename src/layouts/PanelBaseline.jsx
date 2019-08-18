@@ -29,6 +29,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import {withRouter} from 'react-router-dom';
 import CollisionLink from '../components/CollisionLink';
+import Welcome from '../pages/Welcome';
 
 const drawerWidth = 240;
 
@@ -156,6 +157,7 @@ const list = [
 
 const panelRoutes = {
   Main: [
+    { title: 'Welcome', path: '/panel', render: props => <Welcome number={2} {...props}/> },
     { title: 'Item 2', path: '/panel/item2', render: props => <Item number={2} {...props}/> },
     { title: 'Item 3', path: '/panel/item3', render: props => <Item number={3} {...props}/> },
     { title: 'Item 4', path: '/panel/item4', render: props => <Item number={4} {...props}/> },

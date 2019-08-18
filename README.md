@@ -4,9 +4,9 @@
 
 An open source web panel written in react and using material-ui
 
-### Motivation
-
 I needed a good and customizable web panel to use on my projects and some clients projects
+
+##### so here it is!
 
 ### Features
 
@@ -16,7 +16,8 @@ I needed a good and customizable web panel to use on my projects and some client
 * Login and signup pages
 * Reactive title
 * Easy actionbar customization
-* Mini Mode
+* Mini mode
+* Ready for producation
 * And more...
 
 ### Setup and development
