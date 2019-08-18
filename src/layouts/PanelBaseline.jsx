@@ -18,7 +18,6 @@ import MainAppbar from './Appbar';
 import { Switch, Route } from 'react-router'
 import About from '../pages/About';
 import Settings from '../pages/Settings';
-import { Link } from 'react-router-dom'
 import Collapse from '@material-ui/core/Collapse'
 import { ListItemSecondaryAction } from '@material-ui/core';
 import NotFound from '../pages/NotFound';
@@ -29,6 +28,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import {withRouter} from 'react-router-dom';
+import CollisionLink from '../components/CollisionLink';
 
 const drawerWidth = 240;
 
@@ -325,9 +325,6 @@ function PanelBaseline(props) {
     setMiniModeOpen(!miniModeOpen);
   }
 
-  const CollisionLink = React.forwardRef((props, ref) => (
-    <Link innerRef={ref} {...props} />
-  ));
   const drawer = (
     <div>
       <div className={classes.toolbar} />
