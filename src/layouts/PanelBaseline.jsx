@@ -164,7 +164,7 @@ const panelRoutes = {
     { title: 'List all users', path: '/panel/users/list', render: props => <Item number={'List all users'} {...props}/> },
     { title: 'Add new user', path: '/panel/users/add', render: props => <Item number={'Add new user'} {...props}/> },
     { title: 'Settings', path: '/panel/settings', render: props => <Settings {...props}/> },
-    { title: 'About', path: '/panel/about/:id', render: props => <About {...props}/> }
+    { title: 'About', path: '/panel/about/', render: props => <About {...props}/> }
   ]
 }
 
