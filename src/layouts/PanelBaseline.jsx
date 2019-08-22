@@ -30,10 +30,11 @@ import Badge from '@material-ui/core/Badge';
 import {withRouter} from 'react-router-dom';
 import CollisionLink from '../components/CollisionLink';
 import Welcome from '../pages/Welcome';
+import { withStyles, withTheme } from '@material-ui/styles';
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles(theme => ({
+const styles = (theme => ({
   root: {
     display: 'flex',
   },
@@ -168,38 +169,6 @@ const panelRoutes = {
   ]
 }
 
-const appbarActions = () => {
-  return (
-    <React.Fragment>
-      <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-    </React.Fragment>
-  )
-};
-
-const panelGlobals = () => {
-  return (
-    <div>
-    </div>
-  )
-}
-
 function calculateDescendants(children) {
   let descendants = {};
   children.forEach((element,index) => {
@@ -214,55 +183,16 @@ function calculateDescendants(children) {
   return descendants;
 }
 
-function RouteAware(props) {
-  Object.keys(panelRoutes).forEach(group => {
-    let route = panelRoutes[group].filter((item) => item.path === props.match.path)
-    document.title = route[0].title
-  });
-  return (
-    <React.Fragment>
-      {props.children()}
-    </React.Fragment>
-  )
-}
-
-const RouteAwareComponent = withRouter(props => (
-<RouteAware {...props}/>
-  ))
-
-function PanelBaseline(props) {
-  const { container } = props;
-  const classes = useStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [miniModeOpen, setMiniModeOpen] = React.useState(true);
-  const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
-  const [firstRender, setFirstRender] = React.useState(true)
-  const location = window.location.pathname
-
-
-  if(firstRender) {
-    if(currentOpenMenu === '') {
-      list.map((item, index) => {
-        let list = calculateDescendants([item])
-        Object.keys(list).map((current) => {
-          if(typeof list[current].path !== 'undefined') {
-            let route = list[current];
-            if(location === route.path && currentOpenMenu !== current) {
-              setCurrentOpenMenu(current)
-            }
-          }
-        })
-      })
-    }
-   setFirstRender(false)
+class PanelBaseline extends React.Component {
+  state = {
+    mobileDrawerOpen: false,
+    miniMode: false,
+    currentOpenMenu: false
   }
-  function handleDrawerToggle() {
-    setMobileOpen(!mobileOpen);
-  }
+  renderMenu(list, parents) {
+    const {classes} = this.props;
+    const { mobileDrawerOpen, miniMode, currentOpenMenu } = this.state
 
-
-  function renderMenu(list, parents) {
     return list.map((item, index) => {
         if(typeof item.label === 'undefined') {
           return (
@@ -294,17 +224,17 @@ function PanelBaseline(props) {
               let open = listOpen ? parent : key
               return (
                 <List className={classes.list} key={key}>
-                  <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => setCurrentOpenMenu(open)}>
+                  <ListItem className={listOpen ? classes.currentOpenMenuStyleOn : classes.currentOpenMenuStyleOff} button key={key} onClick={() => this.setCurrentOpenMenu(open)}>
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
-                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${miniModeOpen? 'open' : null}`}/>
+                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${miniMode? 'open' : null}`}/>
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
-                    <List className={`${classes.list} ${classes.nestedMenu} ${(miniModeOpen)? null : `${classes.nestedMenuMini} nestedMini`}`}>
+                    <List className={`${classes.list} ${classes.nestedMenu} ${(miniMode)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
-                        renderMenu(item.children, parent_id)
+                        this.renderMenu(item.children, parent_id)
                       }
                     </List>
                   </Collapse>
@@ -314,7 +244,7 @@ function PanelBaseline(props) {
         }
         return (
           <ListItem  component={CollisionLink} to={item.path} button key={key} onClick={() => {
-            setCurrentOpenMenu(parent_id[parent_id.length-1])
+            this.setCurrentOpenMenu(parent_id[parent_id.length-1])
           }}>
             <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
             <ListItemText  className={classes.menuItemText} primary={item.label} />
@@ -322,77 +252,102 @@ function PanelBaseline(props) {
         )}
       )
   }
-
-  function handleDrawerOpen() {
-    setMiniModeOpen(!miniModeOpen);
+  toggleMiniMode = () => {
+    this.setState({
+      miniMode:!this.state.miniMode
+    })
   }
-
-  const drawer = (
-    <div>
-      <div className={classes.toolbar} />
-      <Divider />
-      <List>
-          {
-            renderMenu(list, [''])
-          }
-      </List>
-    </div>
-  );
-
-  return (
-    <div className={classes.root}>
-      {[panelGlobals].map((Item,index) => <Item key={index} />)}
-      <MainAppbar appbarActions={[appbarActions]} setMini={handleDrawerOpen} mini={miniModeOpen} className={classes.appBar} handleDrawerToggle={handleDrawerToggle} />
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            className={miniModeOpen?classes.drawerOpen:classes.drawerClose}
-            classes={{
-                paper: miniModeOpen?classes.drawerOpen:classes.drawerClose,
-              }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            className={miniModeOpen?classes.drawerOpen:classes.drawerClose}
-            classes={{
-                paper: miniModeOpen?classes.drawerOpen:classes.drawerClose,
-              }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      <main className={classes.content}>
+  setCurrentOpenMenu = (currentOpenMenu) => {
+    this.setState({
+      currentOpenMenu
+    })
+  }
+  handleDrawerToggle = (currentOpenMenu) => {
+    this.setState({
+      currentOpenMenu
+    })
+  }
+  render() {
+    const { classes, container, theme } = this.props
+    console.log(this.props)
+    const { mobileDrawerOpen, miniMode, currentOpenMenu } = this.state
+    const drawer = (
+      <div>
         <div className={classes.toolbar} />
-          <Switch>
+        <Divider />
+        <List>
             {
-              Object.keys(panelRoutes).map((group) => {
-                return panelRoutes[group].map((route) => {
-                  return (
-                    <Route path={route.path} key={'panel-route-' + route.path} render={(props) => <RouteAwareComponent {...props}>{route.render}</RouteAwareComponent>} exact/>
-                  )
-                })
-              })
-              
+              this.renderMenu(list, [''])
             }
-            <Route component={NotFound}/>
-          </Switch>
-      </main>
-    </div>
-  );
+        </List>
+      </div>
+    );
+  
+    return (
+      <div className={classes.root}>
+        <MainAppbar setMini={this.toggleMiniMode} mini={miniMode} className={classes.appBar} handleDrawerToggle={this.handleDrawerToggle} />
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Hidden smUp implementation="css">
+            <Drawer
+              container={container}
+              variant="temporary"
+              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              open={mobileDrawerOpen}
+              onClose={this.handleDrawerToggle}
+              className={miniMode?classes.drawerOpen:classes.drawerClose}
+              classes={{
+                  paper: miniMode?classes.drawerOpen:classes.drawerClose,
+                }}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+          <Hidden xsDown implementation="css">
+            <Drawer
+              className={miniMode?classes.drawerOpen:classes.drawerClose}
+              classes={{
+                  paper: miniMode?classes.drawerOpen:classes.drawerClose,
+                }}
+              variant="permanent"
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+            <Switch>
+              {
+                Object.keys(panelRoutes).map((group) => {
+                  return panelRoutes[group].map((route) => {
+                    return (
+                      <Route path={route.path} key={'panel-route-' + route.path} component={route.render} exact/>
+                    )
+                  })
+                })
+                
+              }
+              <Route component={NotFound}/>
+            </Switch>
+        </main>
+      </div>
+    );
+  }
+}
+function PanelBaseline1(props) {
+  const { container } = props;
+  
+  const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [miniMode, setminiMode] = React.useState(true);
+  const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
+  const [firstRender, setFirstRender] = React.useState(true)
+  const location = window.location.pathname
 }
 
+const PanelBaselineWithTheme = withTheme(PanelBaseline)
 
-export default PanelBaseline
+export default withStyles(styles)(PanelBaselineWithTheme)
