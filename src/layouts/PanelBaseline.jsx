@@ -186,12 +186,12 @@ function calculateDescendants(children) {
 class PanelBaseline extends React.Component {
   state = {
     mobileDrawerOpen: false,
-    miniMode: false,
+    extendedMode: true,
     currentOpenMenu: false
   }
   renderMenu(list, parents) {
     const {classes} = this.props;
-    const { mobileDrawerOpen, miniMode, currentOpenMenu } = this.state
+    const { mobileDrawerOpen, extendedMode, currentOpenMenu } = this.state
 
     return list.map((item, index) => {
         if(typeof item.label === 'undefined') {
@@ -228,11 +228,11 @@ class PanelBaseline extends React.Component {
                     <ListItemIcon className={classes.listItemIcon}>{item.icon}</ListItemIcon>
                     <ListItemText  className={classes.menuItemText} primary={item.label} />
                     <ListItemSecondaryAction>
-                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${miniMode? 'open' : null}`}/>
+                      <ChevronDown className={`${classes.listItemIconExpand} ${(listOpen ? classes.listItemIconExpandOpen : '')} mini-expand-icon ${extendedMode? 'open' : null}`}/>
                     </ListItemSecondaryAction>
                   </ListItem>
                   <Collapse in={listOpen} timeout="auto" unmountOnExit>
-                    <List className={`${classes.list} ${classes.nestedMenu} ${(miniMode)? null : `${classes.nestedMenuMini} nestedMini`}`}>
+                    <List className={`${classes.list} ${classes.nestedMenu} ${(extendedMode)? null : `${classes.nestedMenuMini} nestedMini`}`}>
                       {
                         this.renderMenu(item.children, parent_id)
                       }
@@ -252,9 +252,9 @@ class PanelBaseline extends React.Component {
         )}
       )
   }
-  toggleMiniMode = () => {
+  toggleextendedMode = () => {
     this.setState({
-      miniMode:!this.state.miniMode
+      extendedMode:!this.state.extendedMode
     })
   }
   setCurrentOpenMenu = (currentOpenMenu) => {
@@ -270,7 +270,7 @@ class PanelBaseline extends React.Component {
   render() {
     const { classes, container, theme } = this.props
     console.log(this.props)
-    const { mobileDrawerOpen, miniMode, currentOpenMenu } = this.state
+    const { mobileDrawerOpen, extendedMode, currentOpenMenu } = this.state
     const drawer = (
       <div>
         <div className={classes.toolbar} />
@@ -285,7 +285,7 @@ class PanelBaseline extends React.Component {
   
     return (
       <div className={classes.root}>
-        <MainAppbar setMini={this.toggleMiniMode} mini={miniMode} className={classes.appBar} handleDrawerToggle={this.handleDrawerToggle} />
+        <MainAppbar setMini={this.toggleextendedMode} mini={extendedMode} className={classes.appBar} handleDrawerToggle={this.handleDrawerToggle} />
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css">
             <Drawer
@@ -294,9 +294,9 @@ class PanelBaseline extends React.Component {
               anchor={theme.direction === 'rtl' ? 'right' : 'left'}
               open={mobileDrawerOpen}
               onClose={this.handleDrawerToggle}
-              className={miniMode?classes.drawerOpen:classes.drawerClose}
+              className={extendedMode?classes.drawerOpen:classes.drawerClose}
               classes={{
-                  paper: miniMode?classes.drawerOpen:classes.drawerClose,
+                  paper: extendedMode?classes.drawerOpen:classes.drawerClose,
                 }}
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
@@ -307,9 +307,9 @@ class PanelBaseline extends React.Component {
           </Hidden>
           <Hidden xsDown implementation="css">
             <Drawer
-              className={miniMode?classes.drawerOpen:classes.drawerClose}
+              className={extendedMode?classes.drawerOpen:classes.drawerClose}
               classes={{
-                  paper: miniMode?classes.drawerOpen:classes.drawerClose,
+                  paper: extendedMode?classes.drawerOpen:classes.drawerClose,
                 }}
               variant="permanent"
               open
@@ -342,7 +342,7 @@ function PanelBaseline1(props) {
   
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [miniMode, setminiMode] = React.useState(true);
+  const [extendedMode, setextendedMode] = React.useState(true);
   const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
   const [firstRender, setFirstRender] = React.useState(true)
   const location = window.location.pathname
