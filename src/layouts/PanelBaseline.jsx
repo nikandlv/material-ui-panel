@@ -262,15 +262,15 @@ class PanelBaseline extends React.Component {
       currentOpenMenu
     })
   }
-  handleDrawerToggle = (currentOpenMenu) => {
+  handleDrawerToggle = () => {
     this.setState({
-      currentOpenMenu
+      mobileDrawerOpen: !this.state.mobileDrawerOpen
     })
   }
   render() {
     const { classes, container, theme } = this.props
     console.log(this.props)
-    const { mobileDrawerOpen, extendedMode, currentOpenMenu } = this.state
+    const { mobileDrawerOpen, extendedMode } = this.state
     const drawer = (
       <div>
         <div className={classes.toolbar} />
