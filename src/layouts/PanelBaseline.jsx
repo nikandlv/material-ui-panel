@@ -269,7 +269,6 @@ class PanelBaseline extends React.Component {
   }
   render() {
     const { classes, container, theme } = this.props
-    console.log(this.props)
     const { mobileDrawerOpen, extendedMode } = this.state
     const drawer = (
       <div>
