@@ -12,11 +12,11 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 const theme = createMuiTheme({
-  direction: 'ltr',
+  direction: 'rtl',
 });
 function App(props) {
   return (
-    <div dir="ltr">
+    <div dir={theme.direction}>
       <BrowserRouter>
     <StylesProvider jss={jss}>
       <ThemeProvider theme={theme}>

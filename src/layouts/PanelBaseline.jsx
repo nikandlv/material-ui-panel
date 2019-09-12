@@ -337,16 +337,7 @@ class PanelBaseline extends React.Component {
     );
   }
 }
-function PanelBaseline1(props) {
-  const { container } = props;
-  
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [extendedMode, setextendedMode] = React.useState(true);
-  const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
-  const [firstRender, setFirstRender] = React.useState(true)
-  const location = window.location.pathname
-}
+
 
 const PanelBaselineWithTheme = withTheme(PanelBaseline)
 
