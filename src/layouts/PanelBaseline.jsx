@@ -291,7 +291,7 @@ class PanelBaseline extends React.Component {
             <Drawer
               container={container}
               variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              anchor={'left'}
               open={mobileDrawerOpen}
               onClose={this.handleDrawerToggle}
               className={extendedMode?classes.drawerOpen:classes.drawerClose}

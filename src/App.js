@@ -12,7 +12,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] });
 const theme = createMuiTheme({
-  direction: 'rtl',
+  direction: 'ltr',
 });
 function App(props) {
   return (
