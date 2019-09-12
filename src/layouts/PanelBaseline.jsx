@@ -187,7 +187,7 @@ class PanelBaseline extends React.Component {
   state = {
     mobileDrawerOpen: false,
     extendedMode: true,
-    currentOpenMenu: false
+    currentOpenMenu: null
   }
   renderMenu(list, parents) {
     const {classes} = this.props;
@@ -215,6 +215,11 @@ class PanelBaseline extends React.Component {
                   return
                 }
                 listOpen = current === currentOpenMenu
+                if(currentOpenMenu === null) {
+                  if((window.location.pathname == list[current].path) ) {
+                    listOpen = true
+                  }
+                }
               })
             }
               let parent = parent_id[parent_id.indexOf(key) - 1];
@@ -269,7 +274,6 @@ class PanelBaseline extends React.Component {
   }
   render() {
     const { classes, container, theme } = this.props
-    console.log(this.props)
     const { mobileDrawerOpen, extendedMode } = this.state
     const drawer = (
       <div>
@@ -291,7 +295,7 @@ class PanelBaseline extends React.Component {
             <Drawer
               container={container}
               variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              anchor={'left'}
               open={mobileDrawerOpen}
               onClose={this.handleDrawerToggle}
               className={extendedMode?classes.drawerOpen:classes.drawerClose}
@@ -337,16 +341,7 @@ class PanelBaseline extends React.Component {
     );
   }
 }
-function PanelBaseline1(props) {
-  const { container } = props;
-  
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [extendedMode, setextendedMode] = React.useState(true);
-  const [currentOpenMenu, setCurrentOpenMenu] = React.useState('');
-  const [firstRender, setFirstRender] = React.useState(true)
-  const location = window.location.pathname
-}
+
 
 const PanelBaselineWithTheme = withTheme(PanelBaseline)
 
