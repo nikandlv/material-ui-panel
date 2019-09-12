@@ -187,7 +187,7 @@ class PanelBaseline extends React.Component {
   state = {
     mobileDrawerOpen: false,
     extendedMode: true,
-    currentOpenMenu: false
+    currentOpenMenu: null
   }
   renderMenu(list, parents) {
     const {classes} = this.props;
@@ -215,6 +215,11 @@ class PanelBaseline extends React.Component {
                   return
                 }
                 listOpen = current === currentOpenMenu
+                if(currentOpenMenu === null) {
+                  if((window.location.pathname == list[current].path) ) {
+                    listOpen = true
+                  }
+                }
               })
             }
               let parent = parent_id[parent_id.indexOf(key) - 1];
