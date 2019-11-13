@@ -63,7 +63,7 @@ const styles = theme => ({
     }),
     overflowX: "hidden",
     whiteSpace: "nowrap",
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(7),
     "& .mini-expand-icon": {
       opacity: 0
     },
@@ -111,7 +111,6 @@ const styles = theme => ({
     })
   },
   nestedMenuMini: {
-    backgroundColor: "#e3e3e3",
     paddingLeft: "0rem"
   },
   listItemIconExpand: {
