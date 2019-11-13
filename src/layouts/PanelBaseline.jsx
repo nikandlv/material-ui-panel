@@ -63,7 +63,7 @@ const styles = theme => ({
     }),
     overflowX: "hidden",
     whiteSpace: "nowrap",
-    width: theme.spacing(7),
+    width: theme.spacing(7) + 1,
     "& .mini-expand-icon": {
       opacity: 0
     },
@@ -135,8 +135,7 @@ const styles = theme => ({
   },
   list: {
     paddingTop: "unset",
-    paddingBottom: "unset",
-    padding: 4
+    paddingBottom: "unset"
   }
 });
 
