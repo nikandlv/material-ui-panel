@@ -96,12 +96,12 @@ const styles = theme => ({
   listItemIcon: {
     minWidth: 40
   },
-  currentOpenMenuStyleOn: {
-    backgroundColor: "#e3e3e3",
-    borderRadius: "2rem"
+  menuItem: {
+    borderRadius: "2rem",
+    marginTop: 2
   },
-  currentOpenMenuStyleOff: {
-    borderRadius: "2rem"
+  currentOpenMenuStyleOn: {
+    backgroundColor: "#e3e3e3"
   },
   nestedMenu: {
     paddingLeft: "1rem",
@@ -136,7 +136,8 @@ const styles = theme => ({
   },
   list: {
     paddingTop: "unset",
-    paddingBottom: "unset"
+    paddingBottom: "unset",
+    padding: 4
   }
 });
 
@@ -283,11 +284,9 @@ class PanelBaseline extends React.Component {
           return (
             <List className={classes.list} key={key}>
               <ListItem
-                className={
-                  listOpen
-                    ? classes.currentOpenMenuStyleOn
-                    : classes.currentOpenMenuStyleOff
-                }
+                className={`${classes.menuItem} ${
+                  listOpen ? classes.currentOpenMenuStyleOn : null
+                }`}
                 button
                 key={key}
                 onClick={() => this.setCurrentOpenMenu(open)}
@@ -329,6 +328,7 @@ class PanelBaseline extends React.Component {
           onClick={() => {
             this.setCurrentOpenMenu(parent_id[parent_id.length - 1]);
           }}
+          className={classes.menuItem}
         >
           <ListItemIcon className={classes.listItemIcon}>
             {item.icon}
