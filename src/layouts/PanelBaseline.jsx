@@ -13,7 +13,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { useTheme } from "@material-ui/core/styles";
 import MainAppbar from "./Appbar";
 import { Switch, Route } from "react-router";
 import About from "../pages/About";
