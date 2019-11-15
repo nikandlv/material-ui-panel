@@ -16,7 +16,7 @@ const theme = createMuiTheme({
 });
 function App(props) {
   return (
-    <div dir="ltr">
+    <div dir={theme.direction}>
       <BrowserRouter>
     <StylesProvider jss={jss}>
       <ThemeProvider theme={theme}>
